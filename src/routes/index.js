@@ -1,7 +1,10 @@
-import { FilesRouter } from "../components/index.js";
+import { FilesRouter, ServerStatusRouter } from "../components/index.js";
 import { Router } from "express";
 
-const routes = [["files", FilesRouter]];
+const routes = [
+  ["files", FilesRouter],
+  ["status", ServerStatusRouter],
+];
 
 function setRoutes(app) {
   const router = Router();
