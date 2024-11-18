@@ -1,4 +1,4 @@
-# My Express App
+# Secret files API
 
 This is a simple Express application scaffolded with ESLint and Prettier for code quality and formatting.
 
@@ -22,30 +22,38 @@ my-express-app
 ## Getting Started
 
 1. Clone the repository:
+
    ```
-   git clone <repository-url>
+   git clone https://github.com/erickpac/secret-files-api
    ```
 
 2. Navigate to the project directory:
+
    ```
-   cd my-express-app
+   cd secret-files-api
    ```
 
 3. Install the dependencies:
+
    ```
-   npm install
+   yarn install
    ```
 
-4. Start the application:
+4. Run the application in development mode:
+
    ```
-   npm start
+   yarn dev
    ```
+
+   This will start the server with nodemon, which automatically restarts the server when file changes are detected.
 
 ## Scripts
 
-- `npm start`: Starts the Express server.
-- `npm run lint`: Runs ESLint to check for code quality issues.
-- `npm run format`: Formats the code using Prettier.
+- `yarn dev`: Starts the application in development mode with nodemon.
+- `yarn start`: Starts the Express server.
+- `yarn lint`: Runs ESLint to check for code quality issues.
+- `yarn format`: Formats the code using Prettier.
+- `yarn test`: Runs the test suite.
 
 ## License
 
