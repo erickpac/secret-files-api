@@ -26,11 +26,11 @@ export async function processFiles(req, res) {
         }
 
         const parsedContent = await parseFileContent(fileContent);
-        return parsedContent ? { file, lines: parsedContent } : null;
+        return { file, lines: parsedContent };
       })
     );
 
-    res.status(200).json(results.filter(Boolean));
+    res.status(200).json(results);
   } catch (error) {
     const status = error.response?.status ?? 500;
     const message = error.response?.data?.message ?? "Internal server error";
