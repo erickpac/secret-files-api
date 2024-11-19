@@ -31,21 +31,16 @@ async function fetchFileContent(name) {
 }
 
 async function parseFileContent(fileContent) {
-  const validLines = fileContent.split("\n").filter((line) => {
-    const columns = line.split(",");
-    return (
-      columns.length === 4 &&
-      columns[0] &&
-      columns[1] &&
-      !isNaN(columns[2]) &&
-      /^[0-9a-fA-F]{32}$/.test(columns[3])
-    );
-  });
-
-  const lines = validLines.map((line) => {
-    const [, text, number, hex] = line.split(",");
-    return { text, number: Number(number), hex };
-  });
-
-  return lines;
+  return fileContent
+    .split("\n")
+    .map((line) => line.split(","))
+    .filter(
+      ([, , number, hex]) =>
+        number && !isNaN(number) && /^[0-9a-fA-F]{32}$/.test(hex)
+    )
+    .map(([, text, number, hex]) => ({
+      text,
+      number: Number(number),
+      hex,
+    }));
 }
