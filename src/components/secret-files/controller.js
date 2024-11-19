@@ -39,16 +39,17 @@ export async function processFiles(req, res) {
       files.map(async (file) => {
         const fileContent = await fetchFileContent(file);
 
-        if (!fileContent) {
-          return { file, lines: [] };
-        }
+        if (!fileContent) return null;
 
         const parsedContent = await parseFileContent(fileContent);
+
+        if (!parsedContent.length) return null;
+
         return { file, lines: parsedContent };
       })
     );
 
-    res.status(200).json(results);
+    res.status(200).json(results.filter(Boolean));
   } catch (error) {
     const status = error.response?.status ?? 500;
     const message = error.response?.data?.message ?? "Internal server error";
