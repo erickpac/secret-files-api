@@ -30,7 +30,7 @@ export async function processFiles(req, res) {
       }
 
       const parsedContent = await parseFileContent(fileContent);
-      return res.status(200).json({ file: fileName, lines: parsedContent });
+      return res.status(200).json([{ file: fileName, lines: parsedContent }]);
     }
 
     const filesResponse = await api.get("secret/files");
