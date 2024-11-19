@@ -7,7 +7,11 @@ export async function fetchFiles(req, res) {
     const results = await Promise.all(
       files.map(async (file) => {
         const fileContent = await fetchFileContent(file);
-        if (!fileContent) return null;
+
+        if (!fileContent) {
+          return { file, lines: [] };
+        }
+
         const parsedContent = await parseFileContent(fileContent);
         return parsedContent ? { file, lines: parsedContent } : null;
       })
@@ -36,7 +40,8 @@ async function parseFileContent(fileContent) {
     .map((line) => line.split(","))
     .filter(
       ([, , number, hex]) =>
-        number && !isNaN(number) && /^[0-9a-fA-F]{32}$/.test(hex)
+        // number && !isNaN(number) && /^[0-9a-fA-F]{32}$/.test(hex)
+        number && !isNaN(number) && hex
     )
     .map(([, text, number, hex]) => ({
       text,
