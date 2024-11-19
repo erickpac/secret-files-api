@@ -3,6 +3,6 @@ import * as Controller from "./controller.js";
 
 const router = Router();
 
-router.get("/", Controller.getFiles);
+router.get("/data", Controller.fetchFiles);
 
 export default router;

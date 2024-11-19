@@ -1,6 +1,6 @@
 import api from "../../services/api.js";
 
-export async function getFiles(req, res) {
+export async function fetchFiles(req, res) {
   try {
     const response = await api.get("secret/files");
     const files = response.data.files;
