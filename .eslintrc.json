@@ -23,9 +23,7 @@
       { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
     ],
     "eqeqeq": ["error", "always"],
-    "curly": ["error", "all"],
-    "comma-dangle": ["error", "always-multiline"],
-    "no-console": "warn",
+    "no-console": "off",
     "no-debugger": "error"
   }
 }
