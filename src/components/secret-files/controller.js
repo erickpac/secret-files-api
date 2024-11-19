@@ -20,8 +20,9 @@ export async function fetchFiles(req, res) {
     res.status(200).json(results.filter(Boolean));
   } catch (error) {
     const status = error.response?.status ?? 500;
+    const message = error.response?.data?.message ?? "Internal server error";
 
-    res.status(status).json(error.response?.data);
+    res.status(status).json({ error: status, message });
   }
 }
 
