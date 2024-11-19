@@ -1,5 +1,23 @@
 import api from "../../services/api.js";
 
+/**
+ * Processes files based on the request query parameters.
+ *
+ * If a `fileName` is provided in the query, it fetches the content of the specified file,
+ * parses it, and returns the parsed content. If the file is not found, it returns a 404 error.
+ *
+ * If no `fileName` is provided, it fetches a list of secret files, retrieves their content,
+ * parses each file, and returns the results.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The query parameters of the request.
+ * @param {string} [req.query.fileName] - The name of the file to process.
+ * @param {Object} res - The response object.
+ *
+ * @returns {Promise<void>} - A promise that resolves when the processing is complete.
+ *
+ * @throws {Error} - Throws an error if there is an issue with fetching or parsing the files.
+ */
 export async function processFiles(req, res) {
   try {
     const { fileName } = req.query;
@@ -64,6 +82,15 @@ async function parseFileContent(fileContent) {
     }));
 }
 
+/**
+ * Fetches the list of secret files from the API and sends the response.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+ *
+ * @throws {Error} - Throws an error if the API request fails.
+ */
 export async function fetchFileList(req, res) {
   try {
     let response = await api.get("secret/files");
