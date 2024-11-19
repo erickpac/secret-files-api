@@ -1,14 +1,8 @@
 import axios from "axios";
 import "dotenv/config";
 
-const { API_URL, AUTH_TOKEN } = process.env;
-
-if (!API_URL || !AUTH_TOKEN) {
-  throw new Error(
-    "API_URL and AUTH_TOKEN must be defined in the environment variables"
-  );
-}
-
+const API_URL = process.env.API_URL ?? "https://echo-serv.tbxnet.com/v1/";
+const AUTH_TOKEN = process.env.AUTH_TOKEN ?? "aSuperSecretKey";
 const api = axios.create({
   baseURL: API_URL,
   headers: {
