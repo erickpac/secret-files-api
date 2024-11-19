@@ -1,9 +1,22 @@
 import api from "../../services/api.js";
 
-export async function fetchFiles(req, res) {
+export async function processFiles(req, res) {
   try {
-    const response = await api.get("secret/files");
-    const files = response.data.files;
+    const { fileName } = req.query;
+
+    if (fileName) {
+      const fileContent = await fetchFileContent(fileName);
+
+      if (!fileContent) {
+        return res.status(404).json({ error: 404, message: "File not found" });
+      }
+
+      const parsedContent = await parseFileContent(fileContent);
+      return res.status(200).json({ file: fileName, lines: parsedContent });
+    }
+
+    const filesResponse = await api.get("secret/files");
+    const files = filesResponse.data.files;
     const results = await Promise.all(
       files.map(async (file) => {
         const fileContent = await fetchFileContent(file);
@@ -49,4 +62,17 @@ async function parseFileContent(fileContent) {
       number: Number(number),
       hex,
     }));
+}
+
+export async function fetchFileList(req, res) {
+  try {
+    let response = await api.get("secret/files");
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    const status = error.response?.status ?? 500;
+    const message = error.response?.data?.message ?? "Internal server error";
+
+    res.status(status).json({ error: status, message });
+  }
 }
