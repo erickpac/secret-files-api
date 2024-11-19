@@ -1,3 +1,51 @@
-export function getFiles(req, res) {
-  res.send("Get all files");
+import api from "../../services/api.js";
+
+export async function getFiles(req, res) {
+  try {
+    const response = await api.get("secret/files");
+    const files = response.data.files;
+    const results = await Promise.all(
+      files.map(async (file) => {
+        const fileContent = await fetchFileContent(file);
+        if (!fileContent) return null;
+        const parsedContent = await parseFileContent(fileContent);
+        return parsedContent ? { file, lines: parsedContent } : null;
+      })
+    );
+
+    res.status(200).json(results.filter(Boolean));
+  } catch (error) {
+    const status = error.response?.status ?? 500;
+
+    res.status(status).json(error.response?.data);
+  }
+}
+
+async function fetchFileContent(name) {
+  try {
+    const response = await api.get(`secret/file/${name}`);
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function parseFileContent(fileContent) {
+  const validLines = fileContent.split("\n").filter((line) => {
+    const columns = line.split(",");
+    return (
+      columns.length === 4 &&
+      columns[0] &&
+      columns[1] &&
+      !isNaN(columns[2]) &&
+      /^[0-9a-fA-F]{32}$/.test(columns[3])
+    );
+  });
+
+  const lines = validLines.map((line) => {
+    const [, text, number, hex] = line.split(",");
+    return { text, number: Number(number), hex };
+  });
+
+  return lines;
 }

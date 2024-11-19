@@ -13,8 +13,7 @@ if (!API_URL || !AUTH_TOKEN) {
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    Authorization: AUTH_TOKEN,
-    "Content-Type": "application/json",
+    Authorization: `Bearer ${AUTH_TOKEN}`,
   },
 });
 
