@@ -38,27 +38,29 @@ describe("Secret files controller tests", () => {
     it("should return parsed content if file is found", async () => {
       req.query.fileName = "file.txt";
       const fileContent =
-        "1,hello,123,abcdef1234567890abcdef1234567890\n2,world,456,abcdef1234567890abcdef1234567890";
+        "file.txt,hello,123,abcdef1234567890abcdef1234567890\nfile.txt,world,456,abcdef1234567890abcdef1234567890";
       api.get = async () => ({ data: fileContent });
 
       await processFiles(req, res);
 
       expect(res.statusCode).to.equal(200);
-      expect(res.data).to.deep.equal({
-        file: "file.txt",
-        lines: [
-          {
-            text: "hello",
-            number: 123,
-            hex: "abcdef1234567890abcdef1234567890",
-          },
-          {
-            text: "world",
-            number: 456,
-            hex: "abcdef1234567890abcdef1234567890",
-          },
-        ],
-      });
+      expect(res.data).to.deep.equal([
+        {
+          file: "file.txt",
+          lines: [
+            {
+              text: "hello",
+              number: 123,
+              hex: "abcdef1234567890abcdef1234567890",
+            },
+            {
+              text: "world",
+              number: 456,
+              hex: "abcdef1234567890abcdef1234567890",
+            },
+          ],
+        },
+      ]);
     });
 
     it("should return list of files and their parsed content", async () => {
@@ -67,11 +69,11 @@ describe("Secret files controller tests", () => {
           return { data: { files: ["file1.txt", "file2.txt"] } };
         } else if (url === "secret/file/file1.txt") {
           return {
-            data: "1,hello,123,abcdef1234567890abcdef1234567890",
+            data: "file1.txt,hello,123,abcdef1234567890abcdef1234567890",
           };
         } else if (url === "secret/file/file2.txt") {
           return {
-            data: "2,world,456,abcdef1234567890abcdef1234567890",
+            data: "file2.txt,world,456,abcdef1234567890abcdef1234567890",
           };
         }
       };
