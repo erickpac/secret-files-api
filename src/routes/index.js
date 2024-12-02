@@ -6,6 +6,11 @@ const routes = [
   ["status", ServerStatusRouter],
 ];
 
+/**
+ * Sets up the routes for the application.
+ *
+ * @param {Object} app - The Express application instance.
+ */
 function setRoutes(app) {
   const router = Router();
 
