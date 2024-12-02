@@ -32,6 +32,10 @@ export function notFoundHandler(req, res, next) {
  * @param {Function} next - The next middleware function.
  */
 export function errorHandler(err, req, res, next) {
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-  res.status(statusCode).json({ message: err.message, stack: err.stack });
+  const statusCode = res.statusCode && res.statusCode !== 200 ? res.statusCode : 500;
+  res.status(statusCode).json({
+    message: err.message,
+    // Only include stack trace in development mode
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
 }
